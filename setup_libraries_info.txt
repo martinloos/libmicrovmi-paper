@@ -1,0 +1,47 @@
+Steps taken to get everything (at this point the memory dump examples) work at our test environment:
+
+ssh root@MVM-IP
+
+nano /etc/libvmi.conf
+
+-> replace replace 47654 (in “one-47654”) with the ID of your PVM virtual machine
+
+-> vmifs name one-<PVM-ID> /mnt 
+	(mount the vmi file system)
+	-> result: pseudo-file /mnt/mem
+
+xl list //shows VMs
+
+cd libvmtrace21/libvmi/build/examples
+
+./vmi-dump-memory one-<PVM-ID> memorydump
+
+cd ~/volatility3/
+
+python3 vol.py -f ~/libvmtrace21/libvmi/build/examples/memorydump linux.pslist //verify that libvmi memory dump works
+
+cd ~/libvmitrace21
+
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+source $HOME/.cargo/env
+
+git clone https://github.com/Wenzel/libmicrovmi.git
+
+cd libmicrovmi
+
+git branch handle_xenstore_permission_denied origin/handle_xenstore_permission_denied
+
+git checkout handle_xenstore_permission_denied
+
+modify the memory-dump.rs example according to https://github.com/Wenzel/libmicrovmi/issues/132
+
+cargo build --features xen
+
+cargo run --example mem-dump one-<PVM-ID>
+
+python3 vol.py -f ~/libvmtrace21/libmicrovmi/target/debug/examples/one-<PVM-ID>.dump linux.pslist //verify that libmicrovmi memory dump works
+
+cd ~
+
+python3 ./csec_seminar_tool.py //starts the provided tool to measure the times and save them into files
