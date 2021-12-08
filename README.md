@@ -11,3 +11,7 @@ Libmicrovmi tries to solve exactly this problem by providing a low-level core li
 In this paper, we present the core functionality of libmicrovmi. 
 In addition, we also draw a comparison with the de facto standard VMI library libVMI.
 Finally, we also analyze the performance of these two libraries in comparison for 3 different use cases (memory dump, register dump, CR3 event). We implemented this by executing these tasks with a Python program, which measures and logs the time required for this. In order to make a statistical evaluation possible, we obtained 100 measured values for each task.
+
+test: www.google.de
+
+test
